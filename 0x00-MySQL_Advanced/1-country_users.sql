@@ -5,13 +5,9 @@
 -- name is a string
 -- country is an enum that can be 'US', 'CO', or 'TN' and has a default value of 'US'
 
-DROP TYPE IF EXISTS country;
-CREATE TYPE country AS ENUM ('US', 'CO', 'TN');
-
-DROP TABLE IF EXISTS users;
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	email VARCHAR(255) NOT NULL UNIQUE,
 	name VARCHAR(255),
-	country country NOT NULL DEFAULT 'US'
+	country ENUM('US', 'CO', 'TN') DEFAULT 'US'
 );
