@@ -4,10 +4,8 @@ This module contains the function insert_school.
 
 """
 
-from pymongo.collection import Collection
 
-
-def insert_school(mongo_collection: Collection, **kwargs) -> str:
+def insert_school(mongo_collection, **kwargs):
     """
     insert a document in a collection based on kwargs
     """
