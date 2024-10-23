@@ -16,6 +16,7 @@ cache = redis.Redis()
 
 def cacher(method: Callable) -> Callable:
     """Caches output of a function"""
+
     @wraps(method)
     def wrapper(url):
         """Wrapper function"""
@@ -26,6 +27,7 @@ def cacher(method: Callable) -> Callable:
         result = method(url)
         cache.setex(f'result:{url}', 10, result)
         return result
+
     return wrapper
 
 
