@@ -17,14 +17,14 @@ cache = redis.Redis()
 def cacher(method: Callable) -> Callable:
     """Caches output of a function"""
     @wraps(method)
-    def wrapper(url: str):
+    def wrapper(url: str) -> str:
         """Wrapper function"""
         cached = cache.get(f'result:{url}')
         if cached:
             cache.incr(f'count:{url}')
             return cached.decode('utf-8')
         result = method(url)
-        cache.set(f'count:{url}', 1)
+        cache.set(f'count:{url}', 0)
         cache.setex(f'result:{url}', 10, result)
         return result
     return wrapper
