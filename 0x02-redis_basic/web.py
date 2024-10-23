@@ -24,7 +24,7 @@ def cacher(method: Callable) -> Callable:
             cache.incr(f'count:{url}')
             return cached.decode('utf-8')
         result = method(url)
-        cache.set(f'count:{url}', 0)
+        cache.set(f'count:{url}', 1)
         cache.setex(f'result:{url}', 10, result)
         return result
     return wrapper
