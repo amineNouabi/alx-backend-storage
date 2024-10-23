@@ -30,6 +30,7 @@ def cacher(method: Callable) -> Callable:
     return wrapper
 
 
+@cacher
 def get_page(url: str) -> str:
     """Returns core HTML of a webpage"""
     return requests.get(url).text
