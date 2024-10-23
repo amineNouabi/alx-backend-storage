@@ -17,7 +17,7 @@ cache = redis.Redis()
 def cacher(method: Callable) -> Callable:
     """Caches output of a function"""
     @wraps(method)
-    def wrapper(url: str) -> str:
+    def wrapper(url):
         """Wrapper function"""
         cache.incr(f'count:{url}')
         cached = cache.get(f'result:{url}')
