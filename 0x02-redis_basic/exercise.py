@@ -35,16 +35,22 @@ def call_history(method: Callable) -> Callable:
 
 def replay(method: Callable) -> None:
     """Display the history of calls of a function"""
+    if not method or not hasattr(method, '__self__'):
+        return
+    redis_ins = getattr(method.__self__, '_redis', None)
+    if not isinstance(redis_ins, redis.Redis):
+        return
     method_name = method.__qualname__
     inputs = method_name + ":inputs"
     outputs = method_name + ":outputs"
-    redis = redis.Redis()
-    count = redis.get(method_name).decode('utf-8')
+    count = 0
+    if redis_ins.exists(method_name):
+        count = int(redis_ins.get(method_name))
     print(f"{method_name} was called {count} times:")
-    inputs_list = redis.lrange(inputs, 0, -1)
-    outputs_list = redis.lrange(outputs, 0, -1)
+    inputs_list = redis_ins.lrange(inputs, 0, -1)
+    outputs_list = redis_ins.lrange(outputs, 0, -1)
     for i, o in zip(inputs_list, outputs_list):
-        print(f"{method_name}(*{i.decode('utf-8')}) -> {o.decode('utf-8')}")
+        print(f"{method_name}(*{i.decode('utf-8')}) -> {o}")
 
 
 class Cache:
